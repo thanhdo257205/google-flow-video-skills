@@ -12,6 +12,12 @@
 *.zip
 *.tgz
 
+# Keep Excel scripts and sample workbooks local
+*.xlsx
+*.xls
+*.xlsm
+*.xlsb
+
 # Dependencies and Python cache
 node_modules/
 __pycache__/
