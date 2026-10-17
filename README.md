@@ -9,6 +9,32 @@ Hai skill Claude Code cho quy trình tạo và ghép video trên Google Flow. M�
 
 ## Cài đặt cho Claude Code
 
+### Cài qua npx
+
+Cần Node.js 22 trở lên và npm. Khi package `google-flow-video-skills` đã được xuất bản lên npm, chạy trong thư mục dự án:
+
+```powershell
+npx google-flow-video-skills
+```
+
+Lệnh trên chép cả hai skill vào `.claude/skills/`. Có thể chọn cài riêng một skill hoặc cài cho mọi dự án:
+
+```powershell
+npx google-flow-video-skills --skill video
+npx google-flow-video-skills --skill merge
+npx google-flow-video-skills --global
+```
+
+Nếu skill đã tồn tại, lệnh sẽ dừng để giữ các thay đổi cục bộ. Thêm `--force` khi muốn ghi đè các file cùng tên để cập nhật. Lệnh cài chỉ chép file skill; các thư viện Python/ffmpeg cần được kiểm tra riêng theo hướng dẫn từng skill.
+
+Trước khi package có trên npm, có thể cài từ GitHub bằng npm:
+
+```powershell
+npm exec --yes --package=github:thanhdo257205/google-flow-video-skills -- google-flow-video-skills
+```
+
+### Cài thủ công
+
 Clone repository:
 
 ```powershell
@@ -57,3 +83,18 @@ Xem [hướng dẫn merge](google-flow-video-merge_v1/SKILL.md) về đầu vào
 Repository chứa skill tạo video v5 và skill merge v1. Video, log chạy, file ZIP, kịch bản Excel và dữ liệu cá nhân được giữ ở máy người dùng. Các phiên bản skill cũ không nằm trong bản phát hành này.
 
 Các selector giao diện Google Flow có thể cần cập nhật khi giao diện thay đổi.
+
+## Phát hành npm (dành cho maintainer)
+
+Phiên bản npm `1.0.0` đóng gói skill video v5 và merge v1; số phiên bản package độc lập với phiên bản từng skill.
+
+```powershell
+npm test
+npm pack --dry-run
+npm login
+npm publish --access public
+```
+
+Tên package dự kiến: `google-flow-video-skills`. Cần tài khoản npm và hoàn tất xác thực mà npm yêu cầu. Nếu tên không còn khả dụng tại thời điểm phát hành, đổi trường `name` và các lệnh cài tương ứng trước khi xuất bản. Với lần cập nhật tiếp theo, tăng phiên bản package trước khi publish.
+
+Package hiện để `UNLICENSED` vì repository chưa chọn giấy phép phân phối.

@@ -10,6 +10,7 @@
 
 # Packaged archives
 *.zip
+*.tgz
 
 # Dependencies and Python cache
 node_modules/

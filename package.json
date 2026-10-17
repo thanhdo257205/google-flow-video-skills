@@ -1,0 +1,28 @@
+{
+  "name": "google-flow-video-skills",
+  "version": "1.0.0",
+  "description": "Install Claude Code skills for Google Flow video generation v5 and video merging v1",
+  "license": "UNLICENSED",
+  "author": "thanhdo257205",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/thanhdo257205/google-flow-video-skills.git"
+  },
+  "homepage": "https://github.com/thanhdo257205/google-flow-video-skills#readme",
+  "bugs": "https://github.com/thanhdo257205/google-flow-video-skills/issues",
+  "bin": {
+    "google-flow-video-skills": "bin/install.cjs"
+  },
+  "files": [
+    "bin/install.cjs",
+    "google-flow-video_v5/",
+    "google-flow-video-merge_v1/"
+  ],
+  "engines": { "node": ">=22" },
+  "keywords": ["claude-code", "skills", "google-flow", "video", "automation", "ffmpeg"],
+  "publishConfig": { "access": "public" },
+  "scripts": {
+    "test": "node --test",
+    "prepublishOnly": "npm test"
+  }
+}
