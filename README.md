@@ -145,6 +145,35 @@ Có thể giữ thêm cột ghi chú của bạn. Riêng skill ghép cần các 
 
 Repository và package npm **không kèm file Excel mẫu hay kịch bản thực tế**. Các tên file, sheet và đường dẫn trong ví dụ dưới đây chỉ để minh họa; hãy thay bằng dữ liệu của bạn.
 
+#### Cấu trúc workbook và cách nhập dữ liệu
+
+- Một workbook `.xlsx` có thể có nhiều sheet, mỗi sheet là một bộ kịch bản. Khi giao việc, nêu rõ tên file và sheet cần xử lý.
+- Dòng **1** của mỗi sheet chứa tiêu đề cột; dữ liệu bắt đầu từ dòng **2**. Không đặt tiêu đề trang trí hay dòng trống phía trên hàng tiêu đề.
+- Có thể đặt năm cột theo thứ tự `Scenario`, `Scene`, `Name of video`, `Script`, `Selected image`. Script đọc theo tên tiêu đề, nên có thể đổi vị trí cột nhưng cần giữ đúng tên.
+- Định dạng cột **`Name of video` thành Text trước khi nhập**. Ví dụ mã `701.10` phải giữ nguyên chuỗi, tránh bị Excel chuyển thành số `701.1`. Không nhập đuôi `.mp4` vào mã video.
+- Nhập đầy đủ `Script` cho mỗi dòng cần tạo; dòng có `Script` trống sẽ bị bỏ qua khi xuất hàng đợi. Mỗi mã video cần duy nhất trong sheet.
+- Có thể xuống dòng bên trong ô `Script` để phân biệt mô tả hình ảnh và lời thoại. Giữ toàn bộ nội dung của một video trong cùng một ô.
+- Cách dễ kiểm tra nhất là lặp lại `Scenario` ở từng dòng. Nếu gộp ô theo chiều dọc hoặc để trống các dòng tiếp theo của cùng nhóm, công cụ dùng giá trị `Scenario` gần nhất phía trên. Không để `Scenario` của dòng dữ liệu đầu tiên trống; không gộp các ô mã video, kịch bản hoặc tên ảnh.
+- Điền tên ảnh đúng như ảnh trên project Flow. Ảnh tham chiếu cần được tải lên Flow trước; tên trong Excel không tự tải ảnh từ máy lên.
+
+#### Ví dụ hoàn toàn giả lập
+
+Giả sử bạn tự tạo file **`vuon-sao-demo.xlsx`**, sheet **`VuonSao`**, kể chuyện một robot chăm cây ngoài không gian. Toàn bộ tên, mã và lời thoại dưới đây được tạo mới để minh họa, không lấy từ các file Excel trong dự án.
+
+| Scenario | Scene | Name of video | Script | Selected image |
+| --- | --- | --- | --- | --- |
+| Vuon sao | Scene 701: Chao ngay moi | `701.1` | Visual Prompt: A small blue robot stands beside a glowing plant in a cartoon space greenhouse. Keep the camera still. Audio/Dialogue: Robot says, "Good morning, little star plant." | robot-vuon-sao.png |
+| Vuon sao | Scene 701: Chao ngay moi | `701.2` | Visual Prompt: The same blue robot gently waters the glowing plant. Keep the same character and background. Audio/Dialogue: Robot says, "Here is some water for your leaves." | robot-vuon-sao.png |
+
+Trong Excel, nhập `701.1` và `701.2` dưới dạng Text, không nhập ký tự backtick bao quanh. `robot-vuon-sao.png` là tên ảnh giả lập: bạn cần có ảnh của mình trên Flow và thay tên cho khớp. Với hai dòng này:
+
+- Skill tạo video xử lý hai đoạn, đặt mã `701.1` và `701.2`, rồi lưu vào `videos/Vuon sao/` khi dùng cách tổ chức thư mục thông thường.
+- Skill ghép nhận hai mã cùng số đầu `701` thành một nhóm, ghép `701.1` trước `701.2` sau khi bạn xác nhận. Với mã có chữ phân nhánh hoặc đuôi chữ, xem [quy tắc nhóm chi tiết](google-flow-video-merge_v1/references/grouping-rules.md).
+
+Ví dụ yêu cầu tương ứng:
+
+> Dùng skill google-flow-video với file vuon-sao-demo.xlsx, sheet VuonSao, Scenario Vuon sao, tạo hai video 701.1 và 701.2. Link project Flow của tôi là [dán link]. Hãy hỏi các thông số còn thiếu trước khi chạy.
+
 ### 2. Mở project Flow và giao việc tạo video
 
 Mở Chrome, đăng nhập Google Flow và tải ảnh tham chiếu lên project. Sau đó mở Claude Code trong thư mục dữ liệu đã cài skill, chọn **Sonnet 5.5 / medium** theo cấu hình khuyến nghị và gửi yêu cầu đủ thông tin:
