@@ -27,6 +27,22 @@ Quy trình sử dụng: **Chuẩn bị Excel và ảnh → giao việc cho Claud
 
 Skill là bộ hướng dẫn và script để Claude Code thực hiện công việc. Người dùng vẫn cần tài khoản Google Flow và tự duyệt chất lượng hình ảnh, nhân vật, lời thoại cũng như các điểm cắt sau khi ghép.
 
+## Cơ chế tiết kiệm token
+
+Mặc dù dùng **Claude in Chrome** để điều khiển trình duyệt, skill được thiết kế để dùng rất ít token cho các thao tác lặp: phần lớn việc bấm nút, kiểm tra trạng thái và chờ video hoàn tất được thực hiện bằng JavaScript chạy trong trang theo quy trình có sẵn. Claude không cần phân tích ảnh chụp màn hình và quyết định lại từng thao tác ở mỗi vòng chờ.
+
+- **Thao tác bằng code:** các hàm chọn ảnh, đặt thông số, gửi yêu cầu, đổi tên và tải video làm việc trực tiếp với các phần tử giao diện (DOM). Việc kiểm tra trả về trạng thái dạng text/JSON gọn thay vì ảnh chụp màn hình.
+- **Chờ trong trình duyệt:** `waitForGenerate()`, `waitForVideo()` và `waitFor()` tự kiểm tra trạng thái bằng vòng lặp JavaScript. Các vòng chờ này không tự gọi mô hình Claude, nên không phát sinh token Claude chỉ vì Flow mất thêm thời gian tạo video.
+- **Chạy cả hàng đợi:** `loadQueue()` và `runQueue()` cho phép xử lý cả sheet trong trang, giảm số lượt Claude gọi công cụ cho từng video. Script xuất dữ liệu đọc Excel một lần; phần hướng dẫn chung của các prompt có thể được tách ra để giảm nội dung lặp khi nạp hàng đợi. Tiến độ được theo dõi qua log và các lần kiểm tra trạng thái thay vì liên tục chụp màn hình.
+
+Bạn có thể xem cơ chế trong [script điều khiển Flow](google-flow-video_v5/scripts/google_flow_automation.js), [script xuất hàng đợi](google-flow-video_v5/scripts/export_queue.py) và [hướng dẫn queue mode](google-flow-video_v5/references/queue-mode.md). Tổng token của một lượt chạy vẫn phụ thuộc vào độ dài kịch bản, số lần theo dõi và việc xử lý lỗi; đây là mô tả cơ chế tối ưu, không phải mức token cố định cho mỗi video.
+
+## Cấu hình Claude khuyến nghị
+
+**Chọn Sonnet 5.5 với mức suy luận medium trong Claude Code.** Đây là cấu hình mà skill được tối ưu theo quy trình sử dụng của tác giả, nhằm cân bằng khả năng xử lý công việc với lượng token tiêu thụ.
+
+Thiết lập này áp dụng cho **mô hình Claude điều phối công việc**. Model tạo video và thời lượng trên Google Flow là các lựa chọn riêng, được thống nhất khi bắt đầu lượt chạy. Script không tự đổi model hoặc mức suy luận trong Claude Code; bạn chọn cấu hình này trước khi giao việc. Nếu dùng model khác, nên chạy thử một vài video để kiểm tra khả năng thực hiện đúng quy trình trước khi chạy hàng loạt.
+
 ## Chuẩn bị lần đầu
 
 Quy trình tạo video hiện hướng đến **Windows**, vì các bước quản lý file và tiến độ dùng PowerShell. macOS/Linux chưa được kiểm chứng cho toàn bộ quy trình.
@@ -131,7 +147,7 @@ Repository và package npm **không kèm file Excel mẫu hay kịch bản thự
 
 ### 2. Mở project Flow và giao việc tạo video
 
-Mở Chrome, đăng nhập Google Flow và tải ảnh tham chiếu lên project. Sau đó mở Claude Code trong thư mục dữ liệu đã cài skill và gửi yêu cầu đủ thông tin:
+Mở Chrome, đăng nhập Google Flow và tải ảnh tham chiếu lên project. Sau đó mở Claude Code trong thư mục dữ liệu đã cài skill, chọn **Sonnet 5.5 / medium** theo cấu hình khuyến nghị và gửi yêu cầu đủ thông tin:
 
 > Dùng skill google-flow-video để tạo video từ file kich-ban.xlsx, sheet DaoTao, Scenario 1, Scene 2A và Scene 2B. Project Flow: [dán link project của tôi]. Hãy kiểm tra dữ liệu và hỏi các thông số còn thiếu trước khi bắt đầu.
 
