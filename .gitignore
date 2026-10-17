@@ -1,0 +1,30 @@
+# Generated videos and run logs
+/videos/
+/videos_merged/
+/videos_redo/
+/logs/
+*.mp4
+*.webm
+*.mov
+*.mkv
+
+# Packaged archives
+*.zip
+
+# Dependencies and Python cache
+node_modules/
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+
+# Local configuration and credentials
+.env
+.env.*
+!.env.example
+
+# OS and editor temporary files
+.DS_Store
+Thumbs.db
+*.tmp
+*.swp
